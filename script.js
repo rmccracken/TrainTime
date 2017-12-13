@@ -53,24 +53,28 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
     let trainDestination = childSnapshot.val().destination;
     let fristTrain = childSnapshot.val().startTime;
     let trainFrequency = childSnapshot.val().frequency;
-
-    console.log(trainName);
-    console.log(trainDestination);
-    console.log(fristTrain);
-    console.log(trainFrequency);
-
+    // creates variable of firstTrain into a moment.js time (unix based)
     let firstTime = moment(fristTrain, "hhmm").format("HHmm");
-    console.log(firstTime);
+        console.log(firstTime);
+    // creates variable for current time (unix based)
+    let currentTime = moment().format("HHmm");
+        console.log(currentTime);
+    let timeDifference = moment().diff(moment(firstTime), "minutes");
+        console.log(timeDifference);
+    let sinceLastTrain = timeDifference % trainFrequency 
+        console.log(sinceLastTrain);
+    let minutesTillTrain = trainFrequency - sinceLastTrain
+        console.log(minutesTillTrain);
+    
+    let nextTrainArrival = moment().add(minutesTillTrain, "minutes");
 
-  
+    let nextTrainArrivalTime =    moment(nextTrainArrival).format("hhmma");
+    // let randomTime = fristTrain;
+    // let timeFormat = "hhmm"
+    // // converts 
+    // let convertedTime = moment(randomTime, timeFormat);
+    // // converts Military time to AM/PM
+    // console.log(moment.tz(convertedTime, "America/New_York").format("hhmma"));
 
-    let randomTime = fristTrain;
-    let timeFormat = "hhmm"
-    // converts 
-    let convertedTime = moment(randomTime, timeFormat);
-    // converts Military time to AM/PM
-    console.log(moment.tz(convertedTime, "America/New_York").format("hhmma"));
-
-    let minutesAway;
-    $("#employee-table > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td> every   " + trainFrequency + " min. </td><td>");
+    $("#employee-table > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + nextTrainArrivalTime +"</td><td> every   " + trainFrequency + " min. </td><td>" + minutesTillTrain + "</td><td>");
 });
