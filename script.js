@@ -57,24 +57,27 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
     let firstTime = moment(fristTrain, "hhmm").format("HHmm");
         console.log(firstTime);
     // creates variable for current time (unix based)
-    let currentTime = moment().format("HHmm");
+    let currentTime = moment().format("minutes");
         console.log(currentTime);
+    // sets varriable to difference in time etween currentTime and time first train arrives
     let timeDifference = moment().diff(moment(firstTime), "minutes");
         console.log(timeDifference);
+    // sets var to determine time since last train using the modulus for the remainder of trainFrequency and the i
     let sinceLastTrain = timeDifference % trainFrequency 
         console.log(sinceLastTrain);
+    // subtracts the frequency of each train from the time since the last train to give us the time till the next train
     let minutesTillTrain = trainFrequency - sinceLastTrain
         console.log(minutesTillTrain);
-    
+    //adds the minutes from minutes till the next train to current time unix based
     let nextTrainArrival = moment().add(minutesTillTrain, "minutes");
-
-    let nextTrainArrivalTime =    moment(nextTrainArrival).format("hhmma");
+    // converts the next train arival from minutes to actual time
+    let nextTrainArrivalTime =  moment(nextTrainArrival).format("hhmma");
     // let randomTime = fristTrain;
     // let timeFormat = "hhmm"
     // // converts 
     // let convertedTime = moment(randomTime, timeFormat);
     // // converts Military time to AM/PM
     // console.log(moment.tz(convertedTime, "America/New_York").format("hhmma"));
-
+    //  appends the new train info to the table 
     $("#employee-table > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + "</td><td>" + nextTrainArrivalTime +"</td><td> every   " + trainFrequency + " min. </td><td>" + minutesTillTrain + "</td><td>");
 });
